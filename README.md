@@ -24,7 +24,7 @@ conda deactivate
 
 Next, download this package to the location of your choice with the following command.
 ```
-git clone https://github.com/stevemussmann/GTseqTools.git
+git clone https://github.com/stevemussmann/gtseqMAF.git
 ```
 
 If necessary, make the software executable:
@@ -34,13 +34,13 @@ chmod u+x gtseqMAF.py
 
 ## Input Requirements
 ### Required
-The input is a Microsoft Excel formatted file (.xlsx). All data should be in a worksheet titled 'Final Genotypes'. The first row should be a header line, with cell A1 specifying the individual sample column. Cell B1 to the end should specify locus names. Alleles for a genotype should be concatenated per locus (e.g., AA, AT, etc.). A missing genotype for a locus should be recorded as '0'.
+The input is a Microsoft Excel formatted file (.xlsx). All data should be in a worksheet titled 'Final Genotypes'. The first row should be a header line, with cell A1 specifying the individual sample column. Cell B1 to the end should specify locus names. Alleles for a genotype should be concatenated per locus (e.g., AA, AT, etc.). A missing genotype for a locus should be recorded as '0'. An example file is provided in this repository as `testdata.xlsx`
 
 ## Program Options
 Required Inputs:
 * **-x / --infile:** Specify an input Excel file containing GTseq data.
 
-## Example
+## Example Run
 Activate your python environment:
 ```
 conda activate python3
