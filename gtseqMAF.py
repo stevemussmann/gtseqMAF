@@ -3,7 +3,6 @@
 from comline import ComLine
 from gtseq import GTseq
 from maf import MAF
-#from gtconvert import GTconvert
 
 import argparse
 import os
@@ -28,11 +27,25 @@ def main():
 
 	gtFile = GTseq(input.args.infile, logfile)
 	pdf = gtFile.parseFile() #returns pandas dataframe with unfiltered data
-	#pops = gtFile.getPops(pdf) #remove populations column
+	pops = gtFile.getPops(pdf) #remove populations column
 
-	# calculate minor allele frequency
-	gtmaf = MAF(pdf)
+	s = sorted(list(set(pops.values()))) # make list of populations
+
+	# calculate global major and minor allele frequencies
+	gtmaf = MAF(pdf, "global")
+	print("Writing global allele frequencies to global.maf.tsv")
+	print("")
 	gtmaf.getMajorMinor()
+	
+	# calculate major and minor allele frequencies for populations
+	for pop in s:
+		samples = list([k for k, v in pops.items() if v is pop]) # get list of samples in this population
+		popdf = pdf.loc[samples] # pull those samples from the global pandas dataframe
+		print("Writing population allele frequencies for ", pop, " to ", pop, ".maf.tsv.", sep="" )
+		print("")
+		popmaf = MAF(popdf, pop)
+		popmaf.getMajorMinor()
+
 
 main()
 
