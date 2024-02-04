@@ -16,6 +16,11 @@ class ComLine():
 							required=True,
 							help="Specify an Excel file in xlsx format for input."
 		)
+		optional.add_argument("-p", "--populations",
+							dest='populations',
+							action='store_true',
+							help="Turn on population allele frequency calculations."
+		)
 		self.args = parser.parse_args()
 
 		#check if input file ends with .xlsx

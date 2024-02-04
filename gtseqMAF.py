@@ -27,9 +27,26 @@ def main():
 
 	gtFile = GTseq(input.args.infile, logfile)
 	pdf = gtFile.parseFile() #returns pandas dataframe with unfiltered data
-	pops = gtFile.getPops(pdf) #remove populations column
+	pops = pandas.DataFrame() # initialize empty dataframe
+	if input.args.populations==True:
+		try:
+			pops = gtFile.getPops(pdf) #remove populations column
+		except KeyError:
+			print("-p option was invoked.")
+			print("Column with heading \"Population ID\" was not found.")
+			print("Population data is required if the -p option is used.")
+			print("")
+			raise SystemExit
+	else:
+		# remove Population ID column if it exists. Ignore error if it doesn't exist because these data will not be needed.
+		try:
+			pops = gtFile.getPops(pdf) #remove populations column
+		except KeyError:
+			print("")
 
-	s = sorted(list(set(pops.values()))) # make list of populations
+	s = list() # initialize empty list to hold population names
+	if input.args.populations==True:
+		s = sorted(list(set(pops.values()))) # make list of populations
 
 	# calculate global major and minor allele frequencies
 	gtmaf = MAF(pdf, "global")
@@ -38,13 +55,14 @@ def main():
 	gtmaf.getMajorMinor()
 	
 	# calculate major and minor allele frequencies for populations
-	for pop in s:
-		samples = list([k for k, v in pops.items() if v is pop]) # get list of samples in this population
-		popdf = pdf.loc[samples] # pull those samples from the global pandas dataframe
-		print("Writing population allele frequencies for ", pop, " to ", pop, ".maf.tsv.", sep="" )
-		print("")
-		popmaf = MAF(popdf, pop)
-		popmaf.getMajorMinor()
+	if input.args.populations==True:
+		for pop in s:
+			samples = list([k for k, v in pops.items() if v is pop]) # get list of samples in this population
+			popdf = pdf.loc[samples] # pull those samples from the global pandas dataframe
+			print("Writing population allele frequencies for ", pop, " to ", pop, ".maf.tsv.", sep="" )
+			print("")
+			popmaf = MAF(popdf, pop)
+			popmaf.getMajorMinor()
 
 
 main()
