@@ -43,6 +43,7 @@ An example file is provided in this repository as `testdata.xlsx`.
 ## Program Options
 Required Inputs:
 * **-x / --infile:** Specify an input Excel file containing GTseq data.
+
 Optional Inputs:
 * **-p / --populations:** (Boolean switch) Turn on population allele frequency calculations.
 
